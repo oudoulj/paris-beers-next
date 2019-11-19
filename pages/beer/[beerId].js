@@ -1,13 +1,36 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import fetch from "isomorphic-unfetch";
+import Nav from "../../components/nav";
 
 // pages/[beerId].js
 const Beer = ({ beer }) => {
   console.log("In [beerId].js");
   return (
     <>
-      <div>Hello {beer.name}</div>
+      <Nav />
+      <div className="title">{beer.name}</div>
       <div>{beer.description}</div>
+      Brassée par:{" "}
+      <Link href="/brewery/[breweryId]" as={`/brewery/${beer.brewery.id}`}>
+        <a>{`${beer.brewery.name}`}</a>
+      </Link>
+      <div>Alcool :{beer.alcool}%</div>
+      <style jsx>
+        {`
+          .hero {
+            width: 100%;
+            color: #333;
+          }
+          .title {
+            margin: 0;
+            width: 100%;
+            padding-top: 80px;
+            line-height: 1.15;
+            font-size: 36px;
+          }
+        `}
+      </style>
     </>
   );
 };

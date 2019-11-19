@@ -1,13 +1,27 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import fetch from "isomorphic-unfetch";
+import Nav from "../../components/nav";
 
 // pages/[breweryId].js
 const Brewery = ({ brewery }) => {
   console.log("In [breweryId].js");
   return (
     <>
-      <div>Hello {brewery.name}</div>
+      <Nav />
+      <div>{brewery.name}</div>
       <div>{brewery.description}</div>
+      <div>
+        <ul>
+          {brewery.beers.map(beer => (
+            <li key={beer.id}>
+              <Link href="/beer/[beerId]" as={`/beer/${beer.id}`}>
+                <a>{beer.name}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 };

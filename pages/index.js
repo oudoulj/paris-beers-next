@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import Head from "next/head";
 import Nav from "../components/nav";
-import axios from "axios";
 
 const Home = breweries => {
   // const [breweries, setBreweries] = useState(null);
@@ -14,28 +14,15 @@ const Home = breweries => {
       </Head>
 
       <Nav />
-      {breweries !== null ? breweries.breweries.map(brewery => <li key={brewery.id}>{brewery.name}</li>) : null}
-      <div className="hero">
-        <h1 className="title">Welcome to Next.js, yessss!</h1>
-        <p className="description">
-          To get started, edit <code>pages/index.js</code> and save to reload.
-        </p>
-
-        <div className="row">
-          <a href="https://nextjs.org/docs" className="card">
-            <h3>Documentation &rarr;</h3>
-            <p>Learn more about Next.js in the documentation.</p>
-          </a>
-          <a href="https://nextjs.org/learn" className="card">
-            <h3>Next.js Learn &rarr;</h3>
-            <p>Learn about Next.js by following an interactive tutorial!</p>
-          </a>
-          <a href="https://github.com/zeit/next.js/tree/master/examples" className="card">
-            <h3>Examples &rarr;</h3>
-            <p>Find other example boilerplates on the Next.js GitHub.</p>
-          </a>
-        </div>
-      </div>
+      {breweries !== null
+        ? breweries.breweries.map(brewery => (
+            <li key={brewery.id}>
+              <Link href="/brewery/[breweryId]" as={`/brewery/${brewery.id}`}>
+                <a>{brewery.name}</a>
+              </Link>
+            </li>
+          ))
+        : null}
 
       <style jsx>{`
         .hero {
@@ -83,17 +70,21 @@ const Home = breweries => {
           color: #333;
         }
       `}</style>
+      <style jsx global>{`
+        body {
+          background: #81c784;
+        }
+      `}</style>
     </div>
   );
 };
 
 Home.getInitialProps = async () => {
   console.log("Entering getInitialProps");
-  const res = await axios.get("https://paris-brewery-api.herokuapp.com/brewery/");
-  //const json = await res.json();
-  console.log("In getInitialProps", res.data.breweries);
-  //setBreweries(res.data);
-  return { breweries: res.data };
+  const res = await fetch("https://paris-brewery-api.herokuapp.com/brewery/");
+  const json = await res.json();
+  //console.log("In getInitialProps", res.data.breweries);
+  return { breweries: json };
 };
 
 export default Home;
